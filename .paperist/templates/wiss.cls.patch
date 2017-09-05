@@ -1,0 +1,52 @@
+diff --git a/D:/3846masa/Desktop/TexSample2017_20170204/wiss.cls b/.paperist/templates/wiss.cls
+index 690171e..2910a22 100644
+--- a/D:/3846masa/Desktop/TexSample2017_20170204/wiss.cls
++++ b/.paperist/templates/wiss.cls
+@@ -176,7 +176,7 @@
+ % It is used when an article is written by some authors
+ % in different organizations.
+ \def\and{%%                             % \begin{tabular}
+-\end{tabular}\hskip 1em \@plus .17fil\begin{tabular}[t]{l}%% \end{tabular}
++\end{tabular}\hskip 11pt \begin{tabular}[t]{l}%% \end{tabular}
+ } % Flushleft Organizations
+ 
+ \def\maketitle{
+@@ -229,7 +229,7 @@
+ \put(896,0){\line(0,1){8}}
+ \put(894,0){\line(0,1){8}}
+ \put(892,0){\line(0,1){8}}
+-\put(920,0){\textsf{\tiny WISS 2017}}
++\put(920,0){\textsf{\tiny WISS \the\year}}
+ \end{picture}
+ 
+ \begin{flushleft}
+@@ -240,8 +240,8 @@
+ %% end of modify
+  {\small\bfseries \@etitle \par}
+  \vskip 1.2em {\large \lineskip 3\p@ \@plus1\p@ \@minus1\p@
+-\begin{tabular}[t]{l}{\bfseries\bfseries \@author} % Flushleft Organizations
+- \end{tabular}\par}
++ {\bfseries\bfseries\begin{tabular}[t]{l} \@author % Flushleft Organizations
++ \end{tabular}\par}}
+ \end{flushleft}
+ \oldjtoc % Read old jjssst-toc.tex and write again
+ {\def\\{ }\let\thanks\@gobble\def\and{, }\jtoc{\@title}{\@author}}
+@@ -264,7 +264,7 @@
+ \def\journalhead#1{\gdef\title@j{#1}}
+ \journalhead{\@etitle}
+ \def\booktitle#1{\gdef\head@j{#1}}
+-\booktitle{WISS 2017}
++\booktitle{WISS \the\year}
+ \def\etitle#1{\gdef\@etitle{#1}}
+ 
+ \def\ps@headings{\def\@oddfoot{}\def\@evenfoot{}
+@@ -337,7 +337,8 @@
+ %
+ \@checkend{document}\clearpage\begingroup
+ \if@filesw \immediate\closeout\@mainaux
+-\def\global\@namedef##1##2{}\def\newlabel{\@testdef r}%
++% \def\global\@namedef##1##2{}
++\def\newlabel{\@testdef r}%
+ \def\bibcite{\@testdef b}\@tempswafalse \makeatletter\input \jobname.aux
+ \if@tempswa \@warning{Label(s) may have changed.  Rerun to get
+ cross-references right}\fi\fi\endgroup\deadcycles\z@\@@end}

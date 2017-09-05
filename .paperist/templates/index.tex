@@ -1,0 +1,155 @@
+\documentclass[dvipdfmx,uplatex,twoside]{wiss}
+
+% Packages
+\usepackage{ascmac}
+\usepackage{graphicx}
+\usepackage{nidanfloat}
+\usepackage{multicol}
+\usepackage{balance}
+
+% Page size
+\setlength\paperheight{297mm}
+\setlength\paperwidth{210mm}
+
+% Hyperlink / URL
+\PassOptionsToPackage{hyphens}{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{pxjahyper}
+
+% Cites
+\usepackage{cite}
+\makeatletter\def\NAT@parse{\typeout{}}\makeatother
+
+% Font configs
+\usepackage[deluxe]{otf}
+\usepackage[noalphabet,<%= fontpreset %>]{pxchfon}
+\usepackage[prefernoncjk]{pxcjkcat}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{lmodern}
+\usepackage{fix-cm}
+\cjkcategory{sym18}{cjk}
+\cjkcategory{sym19}{cjk}
+%% Use gothic as bold
+\makeatletter
+\DeclareRobustCommand\bfseries{%
+  \not@math@alphabet\bfseries\mathbfsf
+  \fontfamily\gtdefault\fontseries\bfdefault\selectfont
+}
+\makeatother
+
+\newcommand*\sameaffil[1][\value{footnote}]{\footnotemark[#1]}
+
+\year<%= date.year %>\relax
+
+\journalhead{<%= title.ja %>}
+
+\begin{document}
+
+\title{<%= title.ja %>}
+\etitle{}
+
+\author{
+<%
+const orderedAffilIds = [];
+authors.forEach((author, idx) => {
+  -%><%= author.name.ja -%><%
+  const sorted =
+    author.affiliateIds.sort((a, b) => {
+      const aIdx = orderedAffilIds.indexOf(a);
+      const bIdx = orderedAffilIds.indexOf(b);
+      if (aIdx === -1) {
+        return 1;
+      } else if (bIdx === -1) {
+        return -1;
+      }
+      return (aIdx - bIdx);
+    });
+  sorted.forEach((affilId) => {
+    if (orderedAffilIds.includes(affilId)) {
+      const num = orderedAffilIds.indexOf(affilId) + 1;
+      -%>\sameaffil[<%= num -%>]~<%
+    } else {
+      const affiliate = affiliates.find(({id}) => id === affilId);
+      -%>\affil{<%= affiliate.name.ja -%>}~<%
+      orderedAffilIds.push(affilId);
+    }
+  });
+  if (authors.length - 1 !== idx) {
+    -%> \and <%
+  }
+});
+-%>
+}
+
+\begin{abstract}
+\input{dist/abstract}
+\end{abstract}
+
+\maketitle
+
+<%- body %>
+
+<% if (flags.acknowledgment) { -%>
+\section*{謝辞}
+\input{dist/acknowledgment}
+<% } -%>
+
+<% if (flags.futurevision) { %>
+\balance
+<% } else { %>
+\nobalance
+<% } %>
+\bibliographystyle{jwiss}
+\bibliography{bibs/index}
+
+<% if (flags.futurevision) { -%>
+\begin{figure*}[!b]
+\setlength{\unitlength}{1mm}\fboxrule=0.5pt
+\vspace{-93mm}
+\begin{center}
+\framebox[0.95\textwidth]{
+\begin{minipage}{0mm}\begin{picture}(0,91)(0,0)\end{picture}\end{minipage}
+}
+\end{center}
+\vspace*{-93mm}
+\newbox\FUTURE
+\setbox\FUTURE=\vbox{
+\begin{minipage}[b]{0.9\textwidth}
+\begin{multicols}{2}
+\section*{未来ビジョン}
+\setlength{\parindent}{10pt}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%	   未来ビジョンは，下記に記入して下さい		  %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\vspace*{-1mm}
+\normalsize
+
+\input{dist/futurevision}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+%	   未来ビジョンは，上記に記入して下さい		  %
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\end{multicols}
+\end{minipage}
+}
+
+\newlength{\FUTUREHT}
+\setlength{\FUTUREHT}{\the\ht\FUTURE}
+\hspace*{0.045\textwidth}
+\box\FUTURE
+\vspace*{-\the\FUTUREHT}
+\vspace*{-10.9mm}
+\begin{center}
+\fboxrule=0pt
+\framebox[0.9\textwidth]{
+\begin{minipage}{0mm}\begin{picture}(0,91)(0,0)\end{picture}\end{minipage}
+}
+\end{center}
+\end{figure*}
+<% } -%>
+
+\end{document}
