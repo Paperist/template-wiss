@@ -1,0 +1,9 @@
+plugins:
+  remark-behead: { after: null, depth: 1 }
+fetch:
+  - url: http://www.wiss.org/WISS2017/CFP.files/TexSample2017_20170204.zip
+    encoding: Shift_JIS
+    files:
+      - TexSample2017_20170204/wiss.cls
+      - TexSample2017_20170204/wissbase11.cls
+      - TexSample2017_20170204/jwiss.bst
